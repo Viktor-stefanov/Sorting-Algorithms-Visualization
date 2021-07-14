@@ -3,38 +3,38 @@ from random import shuffle
 def swap(arr, i, j):
     arr[i], arr[j] = arr[j], arr[i]
 
-def bubblesort(arr):
+def bubble_sort(arr):
     swapped = False
     for i in range(len(arr) - 1):
         for j in range(1, len(arr) - i):
             if arr[j-1] > arr[j]:
                 swapped = True
                 swap(arr, j, j-1)
-                yield arr, j, j-1
+                yield arr, j, (None, ), j-1
             else:
-                yield arr, j-1, j
+                yield arr, j-1, (None, ), j
         if not swapped:
             break
 
-def selectionsort(arr):
+def selection_sort(arr):
     for i in range(len(arr)-1):
         smallest = i
         for j in range(i + 1, len(arr)):
             if arr[j] < arr[smallest]:
                 smallest = j
-            yield arr, smallest, j
+            yield arr, smallest, (None, ), j
         swap(arr, i, smallest)
 
-def insertionsort(arr):
+def insertion_sort(arr):
     for i in range(1, len(arr)):
         insert_item = arr[i]
         j = i - 1
-        while j >= 0 and insert_item < arr[j]:
+        while j >= 0 and insert_item <= arr[j]:
             arr[j + 1] = arr[j]
             j -= 1
-            yield arr, i, j
+            yield arr, i, (None, ), j
         arr[j+1] = insert_item
-        yield arr, j + 1, i
+        yield arr, j + 1, (None, ), i
 
 def merge(arr, low, mid, high):
     merged = []
@@ -59,45 +59,44 @@ def merge(arr, low, mid, high):
 
     for ind, value in enumerate(merged):
         arr[low + ind] = value
-        yield arr, high, mid, low + ind
+        yield arr, high, (mid, ), low + ind
 
-def mergesort(arr, low, high):
+def merge_sort(arr, low, high):
     if low >= high:
         return arr
 
     mid = low + ((high - low + 1) // 2) - 1
 
-    yield from mergesort(arr, low, mid)
-    yield from mergesort(arr, mid+1, high)
+    yield from merge_sort(arr, low, mid)
+    yield from merge_sort(arr, mid + 1, high)
 
     yield from merge(arr, low, mid, high)
 
-def quicksort(arr, low, high):
+def quick_sort(arr, low, high):
     if low >= high:
         return arr
 
     pivot = arr[high]
-    mid = (low + high) // 2
-    pivotIdx = low
+    pivot_index = low
     for i in range(low, high):
         if arr[i] < pivot:
-            swap(arr, i, pivotIdx)
-            pivotIdx += 1
-        yield arr, (pivotIdx, i), (low, high)
-    swap(arr, high, pivotIdx)
-    yield arr, (pivotIdx, i), (low, high)
+            swap(arr, i, pivot_index)
+            pivot_index += 1
+        yield arr, low, (pivot_index, i), high
+    swap(arr, high, pivot_index)
+    yield arr, low, (pivot_index, i), high
 
-    yield from quicksort(arr, low, pivotIdx - 1)
-    yield from quicksort(arr, pivotIdx + 1, high)
+    yield from quick_sort(arr, low, pivot_index - 1)
+    yield from quick_sort(arr, pivot_index + 1, high)
 
-def bogosort(arr):
+def bogo_sort(arr):
     flag = True
     while flag:
         for i in range(len(arr) - 1):
             if arr[i] > arr[i + 1]:
-                yield arr
+                yield arr, -1, (None, ), -1
                 shuffle(arr)
                 break
         else:
-            yield arr
+            yield sorted(arr), None, (None, ), None
             flag = False
