@@ -159,21 +159,21 @@ class Visualization:
         self.graph_canvas = FigureCanvasTkAgg(fig, master=self.root)
         self.operation_var = tkinter.StringVar()
         self.operation_var.set(f"Operations: 0")
-        op_counter = tkinter.Label(self.root, textvariable=self.operation_var, font=("Aria;", 18, "bold"), bg="#8ecae6", fg="#a2d2ff")
+        op_counter = tkinter.Label(self.root, textvariable=self.operation_var, font=("Aria;", 18, "bold"), bg="#8ecae6")
         # create a 'header' using a canvas for the round edges...
-        header_canvas = tkinter.Canvas(self.root, bg="#8ecae6", highlightthickness=0, height=110)
-        round_rectangle(0, 0, 1200, 60, header_canvas, fill="#a2d2ff")
-        header = tkinter.Label(self.root, text=f"{alg_name.capitalize()} performed on an array of {self.array_size} elements", font=("Aria;", 28, "bold"), bg="#a2d2ff")
+        header_canvas = tkinter.Canvas(self.root, bg="#8ecae6", highlightthickness=0, height=90)
+        round_rectangle(0, 0, 1100, 60, header_canvas, fill="#a2d2ff")
+        header = tkinter.Label(self.root, text=f"{alg_name.capitalize()} performed on an array of {self.array_size} elements", font=("Aria;", 28, "bold"), bg="#a2d2ff", justify="center", width=47)
         # use a canvas as a menu button
         menu_canvas = tkinter.Canvas(self.root, bg="#8ecae6", highlightthickness=0)
         round_rectangle(0, 0, 170, 50, menu_canvas, fill="#a2d2ff")
         menu_canvas.create_text(85, 25, fill="black", font=("Aria;", 20, "bold"), text="Menu")
         menu_canvas.bind("<ButtonRelease-1>", lambda e: self.main_screen())
         # put everything on the screen
-        header_canvas.pack(fill=tkinter.BOTH, padx=(100, 0), pady=(60, 0))
+        header_canvas.pack(fill=tkinter.BOTH, padx=(150, 0), pady=(60, 0))
+        header.place(x=155, y=68)
         menu_canvas.place(x=1200, y=825, w=200, h=50)
         self.graph_canvas.get_tk_widget().place(x=-67, y=60)
-        header.place(x=120, y=69)
         op_counter.place(x=120, y=820)
 
         return fig, ax
