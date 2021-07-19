@@ -1,12 +1,13 @@
 import tkinter
 import random
 import sys
-import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from sorting_algorithms.sorts import *
-from info import sorts
 from tkinter import ttk
+from info import sorts
+
 
 def round_rectangle(x1, y1, x2, y2, canvas, radius=25, **kwargs):
     """ create a round rectangle with the create_polygon method of the canvas tkinter object. P.S. Tkinter sucks! """
@@ -80,7 +81,7 @@ class Visualization:
         header = tkinter.Label(text="Sorting Algorithms Visualization", font=("Aria;",  48, "bold"), background="#023047", fg="white")
         alg_canvas = tkinter.Canvas(self.root, bg="#8ecae6", highlightthickness=0)
         round_rectangle(0, 0, 425, 120, alg_canvas, radius=25, fill="#a2d2ff")
-        algorithms = ("Bubble Sort", "Selection Sort", "Insertion Sort", "Merge Sort", "Quick Sort", "Bogo Sort")
+        algorithms = ("Bubble Sort", "Selection Sort", "Insertion Sort", "Merge Sort", "Quick Sort", "Bogo Sort", "Heap Sort")
         self.combobox_v = tkinter.StringVar()
         self.combobox_v.trace("w", alg_selected)
         sorting_alg_label = tkinter.Label(self.root, text="Sorting algorithm:", font=("Aria;", 28), bg="#a2d2ff")
@@ -108,12 +109,12 @@ class Visualization:
 
         speed_canvas = tkinter.Canvas(self.root, bg="#8ecae6", highlightthickness=0, height=180)
         round_rectangle(0, 0, 425, 120, speed_canvas, fill="#a2d2ff")
-        sorting_speed_label = tkinter.Label(text="Sorting speed:", font=("Aria;", 28), bg="#a2d2ff")
-        self.sorting_speed = ttk.Combobox(values=("Study", "Slow", "Fast"), state="readonly", font=("Aria;", 24), width=13)
+        sorting_speed_label = tkinter.Label(text="Animation speed:", font=("Aria;", 28), bg="#a2d2ff")
+        self.sorting_speed = ttk.Combobox(values=("Study", "Slow", "Fast"), state="readonly", font=("Aria;", 24), width=15)
         self.sorting_speed.current(0)  # set the current item to the first item
         speed_canvas.place(x=915, y=130, w=425)
-        sorting_speed_label.place(x=990, y=140)
-        self.sorting_speed.place(x=985, y=195)
+        sorting_speed_label.place(x=975, y=140)
+        self.sorting_speed.place(x=970, y=195)
 
         # use a canvas as a 'button' and set up event handlers for click press and release
         start_canvas = tkinter.Canvas(self.root, bg="#8ecae6", highlightthickness=0)
@@ -131,7 +132,8 @@ class Visualization:
         speed = self.sorting_speed.get()
         clear_screen(self.root)
         # check the function name e.g. (bogo_sort) with the current algorithm's name and if they match you assign the function to the algorithm variable
-        self.sorting_alg = [sort for sort in (bubble_sort, insertion_sort, selection_sort, merge_sort, quick_sort, bogo_sort) if sort.__name__.replace("_", " ") == alg_name.lower()][0]
+        self.sorting_alg = [sort for sort in (bubble_sort, insertion_sort, selection_sort, merge_sort, quick_sort, bogo_sort, heap_sort)
+                            if sort.__name__.replace("_", " ") == alg_name.lower()][0]
         self.array_size = 10 if size == "Miniature" else 25 if size == "Small" else 100 if size == "Average" else 200
         self.sorting_speed = speed if speed == "Study" else 500 if speed == "Slow" else 1
         if self.sorting_alg == bogo_sort:
@@ -183,7 +185,7 @@ class Visualization:
                 next_frame = next(generator)
                 display_frame(next_frame, study=True)
             except StopIteration:
-                print("finished")
+                pass
                 # call self.finished_visualization(). And create it ofc
 
         def display_frame(frame, study=False):

@@ -100,3 +100,30 @@ def bogo_sort(arr):
         else:
             yield sorted(arr), None, (None, ), None
             flag = False
+
+def max_heapify(tree, n, i):
+    larger = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+
+    # with left < n and right < n we check whether there is a 'left' and 'right' child of the current node
+    if left < n and tree[left] > tree[larger]:
+        larger = left
+    if right < n and tree[right] > tree[larger]:
+        larger = right
+
+    if larger != i:
+        tree[i], tree[larger] = tree[larger], tree[i]
+        # yield tree, i, (None, ), larger # why yielding here gives weird outputs
+        max_heapify(tree, n, larger)
+
+def heap_sort(array):
+    n = len(array)
+    # create a heap data structure from the given array
+    for i in range(n // 2, -1, -1):
+        max_heapify(array, n, i)
+    # actual heap sort logic
+    for i in range(n-1, 0, -1):
+        array[i], array[0] = array[0], array[i]
+        max_heapify(array, i, 0)
+        yield array, i, (None,), 0
